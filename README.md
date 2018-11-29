@@ -140,6 +140,8 @@ HTML.header = {
   { type:"li", id: "header_contentList_1", html: "0",  class: "hide" },  
   { type:"li", id: "header_contentList_2", html: "1",  class: "hide" },
  ] 
+ 
+ DOM.add( "header", "#app" )
  ```
 
  
