@@ -6,7 +6,7 @@ DOMinus.js is a reactive data binding library that turn HTML irrelevant.
 
  ## What this make?
   
- Change DATA -> Change VIEW automatically
+ Change DATA -> Change VIEW automagically
  ```Javascript
  HTML.myDiv.html = "hello world" 
  // <div id="myDiv"> hello world </div>
@@ -90,7 +90,7 @@ The "HTML codes" now interest only for browsers.
  
 ## REACTivity
 
- Now always that propertie "HTML.myDiv" change, DOM View change automatically.
+ Now always that propertie "HTML.myDiv" change, DOM View change automagically.
  
   ```Javascript
  HTML.myDiv.html = "hello world" 
