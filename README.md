@@ -2,6 +2,7 @@
 
 DOMinus.js is a reactive data binding library that turn HTML irrelevant.
 
+---
 
  ## What this make?
   
@@ -17,6 +18,8 @@ DOMinus.js is a reactive data binding library that turn HTML irrelevant.
  // <button id="myDiv" onclick="go()"> hello world </button> 
   ```
   
+  ---
+  
  ## Principles:
   
  
@@ -26,8 +29,9 @@ DOMinus.js is a reactive data binding library that turn HTML irrelevant.
  * **TERRITORiality**
  * **CONVENTionality**
  
+ ---
  
-# OBJECTivity
+## OBJECTivity
 
 No have more mixture of HTML with javascript.
 
@@ -61,8 +65,9 @@ The "HTML codes" now interest only for browsers.
  
  The tag "#app" is the div to append the element.
  
+ ---
  
- # REACTivity
+## REACTivity
 
  Now always that propertie "HTML.myDiv" change, DOM View change automatically.
  
@@ -77,7 +82,9 @@ The "HTML codes" now interest only for browsers.
  // <button id="myDiv" onclick="go()"> hello world </button> 
   ```
  
-  # FAMILiarity
+ ---
+ 
+## FAMILiarity
 
 Each element has three properties: type, attrs and html; 
  
@@ -149,11 +156,10 @@ HTML.header = {
 </div>
 ```
 
+---
  
-   # TERRITORiality
+## TERRITORiality
 
- The first level of properties in object "HTML" - like HTML.a, HTML.b - define the "groups of updates" for DOM.
- 
  For updates occur only in this "territory" or "region" or "group of elements", create different elements inside "HTML".
  
  Example:
@@ -167,7 +173,9 @@ HTML.header = {
  
  As a result, you control which "territories" are updated with what object modifications.
  
-   # CONVENTionality
+ ---
+ 
+## CONVENTionality
  
  To define that an object is "parent" or "child" of other uses the convention: parent_child.
  
