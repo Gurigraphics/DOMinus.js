@@ -1,7 +1,7 @@
 ![alt tag](https://imgur.com/a8IlQGU.png)
 
 DOMinus.js is a reactive data binding library that turn HTML irrelevant.
-
+ 
 ---
 
  ## What this make?
@@ -238,6 +238,14 @@ HTML.header = {
 Observable Slim is a singleton that utilizes ES6 Proxies to observe changes made to an object and any nested children of that object. It is intended to assist with state management and one-way data binding.
 [observable-slim](https://github.com/ElliotNB/observable-slim)
 
+ 
+ ---
+
+ ## Size
+ 
+**DOMinus**: 4Kb
+
+**Observable-slim**: 5Kb
  
 ## License
 
