@@ -1,4 +1,4 @@
-![alt tag](https://imgur.com/FO7LGTc.png)
+![alt tag](https://imgur.com/a8IlQGU.png)
 
 DOMinus.js is a reactive data binding library that turn HTML irrelevant.
 
@@ -20,6 +20,27 @@ DOMinus.js is a reactive data binding library that turn HTML irrelevant.
   
   ---
   
+## How use this
+
+```Html
+<script src="observable-slim.min.js"></script>
+<script src="dominus.min.js"></script>
+
+<script>
+ 
+HTML.mydiv = {
+  type: "div",
+  attrs: { id: "mydiv" },
+  html: "Hello World"
+}
+DOM.add("mydiv", "#app")
+
+</script>
+//<div id="mydiv" > Hello World </div>
+```
+
+  ---
+  
  ## Principles:
   
  
@@ -33,7 +54,7 @@ DOMinus.js is a reactive data binding library that turn HTML irrelevant.
  
 ## OBJECTivity
 
-No have more mixture of HTML with javascript.
+No more mixture of HTML with javascript.
 
 All "HTML codes" are represented in a javascript object called "HTML". 
 
@@ -123,7 +144,7 @@ HTML.header = {
   
  You can chain several elements inside others elements to create your "components".
 
-### That's clean code! 
+### That's Clean Code! 
  ```Javascript
  HTML.header = {
   type: "ul", 
@@ -211,14 +232,16 @@ HTML.header = {
   
  And that is all.
 
+
+## Dependences
+
+Observable Slim is a singleton that utilizes ES6 Proxies to observe changes made to an object and any nested children of that object. It is intended to assist with state management and one-way data binding.
+[observable-slim](https://github.com/ElliotNB/observable-slim)
+
  
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
+## License
+
+ [MIT](http://opensource.org/licenses/MIT)
+
+Copyright (c) Gurigraphics, 2018.
+  
