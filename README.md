@@ -39,6 +39,10 @@ DOM.add("mydiv", "#app")
 //<div id="mydiv" > Hello World </div>
 ```
 
+ ## Sandbox
+
+https://playcode.io/180373
+
   ---
   
  ## Principles:
