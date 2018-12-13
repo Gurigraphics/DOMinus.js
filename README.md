@@ -8,14 +8,14 @@ DOMinus.js is a reactive data binding library that turn HTML irrelevant.
   
  Change DATA -> Change VIEW automagically
  ```Javascript
- HTML.myDiv.html = "hello world" 
- // <div id="myDiv"> hello world </div>
+ HTML.element.html = "hello world" 
+ // <div id="element"> hello world </div>
   
- HTML.myDiv.type = "button"
- // <button id="myDiv"> hello world </button>
+ HTML.element.tag = "button"
+ // <button id="element"> hello world </button>
  
- HTML.myDiv.onclick = "go()"
- // <button id="myDiv" onclick="go()"> hello world </button> 
+ HTML.element.onclick = "go()"
+ // <button id="element" onclick="go()"> hello world </button> 
   ```
   
   ---
@@ -28,15 +28,15 @@ DOMinus.js is a reactive data binding library that turn HTML irrelevant.
 
 <script>
  
-HTML.mydiv = {
-  type: "div",
-  attrs: { id: "mydiv" },
+HTML.element = {
+  tag: "div",
+  attrs: { id: "element" },
   html: "Hello World"
 }
-DOM.add("mydiv", "#app")
+DOM.add("element", "#app")
 
 </script>
-//<div id="mydiv" > Hello World </div>
+//<div id="element" > Hello World </div>
 ```
 
  ## Sandbox
@@ -68,9 +68,9 @@ The "HTML codes" now interest only for browsers.
   
  Example:
  ```Javascript
- HTML.myDiv = {
-  type: "div", 
-  attrs: { id: "myDiv" },
+ HTML.element = {
+  tag: "div", 
+  attrs: { id: "element" },
   html: "hello"  
  }
  ```
@@ -78,15 +78,15 @@ The "HTML codes" now interest only for browsers.
  This will render this: 
  
   ```Html
- <div id="myDiv"> hello </div>
+ <div id="element"> hello </div>
  ```
  To append this element to "DOM" use:
  
   ```Javascript
- DOM.add( "myDiv", "#app" )
+ DOM.add( "element", "#app" )
   ``` 
   
- The string "myDiv" of "HTML.myDiv".
+ The string "element" of "HTML.element".
  
  The tag "#app" is the div to append the element.
  
@@ -97,25 +97,25 @@ The "HTML codes" now interest only for browsers.
  Now always that propertie "HTML.myDiv" change, DOM View change automagically.
  
   ```Javascript
- HTML.myDiv.html = "hello world" 
- // <div id="myDiv"> hello world </div>
+ HTML.element.html = "hello world" 
+ // <div id="element"> hello world </div>
   
- HTML.myDiv.type = "button"
- // <button id="myDiv"> hello world </button>
+ HTML.element.tag = "button"
+ // <button id="element"> hello world </button>
  
- HTML.myDiv.onclick = "go()"
- // <button id="myDiv" onclick="go()"> hello world </button> 
+ HTML.element.onclick = "go()"
+ // <button id="element" onclick="go()"> hello world </button> 
   ```
  
  ---
  
 ## FAMILiarity
 
-Each element has three properties: type, attrs and html; 
+Each element has three properties: tag, attrs and html; 
  
    ```Javascript
 HTML.header = {
-   type: "ul", 
+   tag: "ul", 
    attrs: { id: "header", class: "myClass", style: "color:red" },
    html: "header_content"  
 }
@@ -128,8 +128,8 @@ HTML.header = {
  Example:
  ```Javascript
  HTML.header_content = [
-  { type:"li", id: "header_content_1", html: "0", class: "hide" },  
-  { type:"li", id: "header_content_2", html: "1", class: "hide" },
+  { tag:"li", id: "header_content_1", html: "0", class: "hide" },  
+  { tag:"li", id: "header_content_2", html: "1", class: "hide" },
  ] 
  ```
  
@@ -151,19 +151,19 @@ HTML.header = {
 ### That's Clean Code! 
  ```Javascript
  HTML.header = {
-  type: "ul", 
+  tag: "ul", 
   attrs: { id: "header", class: "myClass", style: "color:red" },
   html: "header_content"  
  }
  
  HTML.header_content = [
-  { type:"li", id: "header_content_1", html: "0",  class: "hide" },  
-  { type:"ul", id: "header_content_2", html: "header_contentList",  class: "hide" },
+  { tag:"li", id: "header_content_1", html: "0",  class: "hide" },  
+  { tag:"ul", id: "header_content_2", html: "header_contentList",  class: "hide" },
  ] 
  
  HTML.header_contentList = [
-  { type:"li", id: "header_contentList_1", html: "0",  class: "hide" },  
-  { type:"li", id: "header_contentList_2", html: "1",  class: "hide" },
+  { tag:"li", id: "header_contentList_1", html: "0",  class: "hide" },  
+  { tag:"li", id: "header_contentList_2", html: "1",  class: "hide" },
  ] 
  
  DOM.add( "header", "#app" )
@@ -220,8 +220,8 @@ HTML.header = {
  Use the same convention to IDs
  ```Javascript
  HTML.header_contents = [
-  { type:"li", id: "header_contents_child1", class: "hide", html: "11 " },  
-  { type:"li", id: "header_contents_child2", class: "hide", html: "12" },
+  { tag:"li", id: "header_contents_child1", class: "hide", html: "11 " },  
+  { tag:"li", id: "header_contents_child2", class: "hide", html: "12" },
  ] 
   ```
  So, you can remove "header_contents_child2" of "header_contents" with:
