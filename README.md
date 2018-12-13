@@ -9,14 +9,13 @@ DOMinus.js is a reactive data binding library that turn HTML irrelevant.
  Change "**data**" -> Change "**view**" automagically
  ```Javascript
  //<div id="element"></div>
+
  HTML.element.html = "hello world" 
  //<div id="element"> hello world </div>
  
- //<div id="element"> hello world </div>
  HTML.element.tag = "button"
  //<button id="element"> hello world </button>
- 
- //<button id="element"> hello world </button>
+
  HTML.element.onclick = "go()"
  //<button id="element" onclick="go()"> hello world </button> 
   ```
