@@ -1,6 +1,6 @@
 /*
  * 	DOMinus.js
- *	Version 0.1.1
+ *	Version 1.0.0
  * 	https://github.com/Gurigraphics/DOMinus.js
  *
  * 	Licensed under the MIT license:
