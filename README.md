@@ -43,7 +43,7 @@ DOM.add("element", "#app")
 
  ## Sandbox
 
-https://playcode.io/180373
+https://playcode.io/180373/v2
 
   ---
   
