@@ -32,7 +32,7 @@ DOMinus.js is a reactive data binding library that turn HTML irrelevant.
  
 HTML.element = {
   tag: "div",
-  attrs: { id: "element" },
+  id: "element", // or attrs: { id: "element" },
   html: "Hello World"
 }
 DOM.add("element", "#app")
@@ -72,7 +72,7 @@ The "HTML codes" now interest only for browsers.
  ```Javascript
  HTML.element = {
   tag: "div", 
-  attrs: { id: "element" },
+  id: "element", // or attrs: { id: "element" },
   html: "hello"  
  }
  ```
@@ -118,7 +118,10 @@ Each element has three properties: tag, attrs and html;
    ```Javascript
 HTML.header = {
    tag: "ul", 
-   attrs: { id: "header", class: "myClass", style: "color:red" },
+   id: "header",
+   class: "myClass",
+   style: "color:red",
+   // or attrs: { id: "header", class: "myClass", style: "color:red" },
    html: "header_content"  
 }
    ```
@@ -154,7 +157,10 @@ HTML.header = {
  ```Javascript
  HTML.header = {
   tag: "ul", 
-  attrs: { id: "header", class: "myClass", style: "color:red" },
+  id: "header",
+  class: "myClass",
+  style: "color:red",
+  // or attrs: { id: "header", class: "myClass", style: "color:red" },
   html: "header_content"  
  }
  
