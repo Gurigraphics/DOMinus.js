@@ -1,6 +1,6 @@
 /*
  * 	DOMinus.js
- *	Version 1.0.0
+ *	Version 1.0.1
  * 	https://github.com/Gurigraphics/DOMinus.js
  *
  * 	Licensed under the MIT license:
@@ -8,22 +8,33 @@
  *  
  *	DOMinus.js is a reactive data binding library that turn HTML irrelevant.
  */
-var HTML = {}
+var HTML = {} 
 
 var DOM = {
     RENDER: [],
-    TAGS: [],      
+    class: {
+      add: function( el, classe ){        
+        HTML[ el ].class = HTML[ el ].class + " " + classe
+      },
+      remove: function( el, classe ){
+        var oldClasses = HTML[ el ].class.split(" ")
+        var newClasses = "";
+        for( index in oldClasses ){
+          if( oldClasses[ index ] != classe && oldClasses[ index ] ){
+            newClasses = newClasses + " " + oldClasses[ index ]
+          } 
+        }     
+        HTML[ el ].class = newClasses.substring(1)
+      }      
+    },
     get: function( el ){
-       if( DOM.TAGS[ el ] ){ 
-         return DOM.TAGS[ el ]  
-       }else if( UTILS.contains( el, "." ) ) { 
-         DOM.TAGS[ el ] = document.getElementsByClassName( UTILS.subs( el ) )[0]
+       if( UTILS.contains( el, "." ) ) { 
+         return document.getElementsByClassName( UTILS.subs( el ) )[0]
        }else if( UTILS.contains( el, "#" ) ){ 
-         DOM.TAGS[ el ] = document.getElementById( UTILS.subs( el ) ) 
+         return document.getElementById( UTILS.subs( el ) ) 
        }else { 
-         DOM.TAGS[ el ] = document.getElementsByTagName( el )[0] 
-       }    
-       return DOM.TAGS[ el ]
+         return document.getElementsByTagName( el )[0] 
+       }
     },
     add: function( html, el ){  
        DOM.RENDER[ html ] = [ el, html ]
@@ -34,7 +45,7 @@ var DOM = {
        var r = DOM.getRender( el ) 
        if( r ) { 
          DOM.draw( r[0], MOD.h( HTML[ r[1] ] ) )
-         console.log( "Updated path: "+el )
+         console.log( "Updated path: "+el )         
        }
     },
     draw: ( el, content ) => {       
@@ -78,17 +89,26 @@ var MOD = {
     emptyElements: [ "area","base","br","col","embed","hr","img","input",
             "keygen","link","meta","param","source","track","wbr" 
            ],
-    h: function( data ){ 
+    h: function( data ){       
       if( UTILS.isArray( data ) ) {   
         return MOD.mountMap( data )
       }else return data ? MOD.mount( data ) : 0
     },
     mount: function( data ){  
       if( !data.tag ) { data.tag = "div" }
-      var el = "<"+data.tag
-      for( index in data.attrs ) { 
-        if( UTILS.verify( index ) ) { el+= (" "+index+"='"+data.attrs[ index ]+"' ") } 
-      }     
+      var el = "<"+data.tag      
+      if( !data.attrs ){      
+        for( index in data ) {          
+          if( index != "tag" && index != "html" ) {        
+            if( UTILS.verify( index ) ) { el+= (" "+index+"='"+data[ index ]+"' ") } 
+          } 
+        }        
+      }else{
+        for( index in data.attrs ) { 
+          if( UTILS.verify( index ) ) { el+= (" "+index+"='"+data.attrs[ index ]+"' ") } 
+        } 
+      }
+      
       if( data.html ) { 
         if( HTML[ data.html ] ){ el+= ">" + MOD.h( HTML[ data.html ] ) }
         else el+= ">" + data.html; 
