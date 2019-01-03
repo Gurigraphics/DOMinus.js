@@ -180,7 +180,8 @@ var Dominus = function(){
     set( target, key, value ) {
       this.keys = {};
       target[ key ] = value    
-      this.update()  
+      this.update()
+      return true;
     },
     deleteProperty: function( target, key ) {
       if( key in target ) {
