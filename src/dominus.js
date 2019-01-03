@@ -1,13 +1,13 @@
 /*
  * 	DOMinus.js
- *	Version 1.0.1
+ *	Version 2.0.0
  * 	https://github.com/Gurigraphics/DOMinus.js
  *
  * 	Licensed under the MIT license:
  * 	http://www.opensource.org/licenses/MIT
  *  
  *	DOMinus.js is a reactive data binding library that turn HTML irrelevant.
- */
+ */  
 var HTML = {} 
 
 var DOM = {
@@ -107,22 +107,12 @@ var MOD = {
         for( index in data.attrs ) { 
           if( UTILS.verify( index ) ) { el+= (" "+index+"='"+data.attrs[ index ]+"' ") } 
         } 
-      }
+      }            
       
       if( data.html ) { 
         if( HTML[ data.html ] ){ el+= ">" + MOD.h( HTML[ data.html ] ) }
         else el+= ">" + data.html; 
-      }else if( data.mount ) {  
-        if( HTML[ data.mount ] ) {        
-          if( UTILS.isArray( HTML[ data.mount ] ) ) {          
-            el+= ">" + MOD.mountMap( HTML[ data.mount ] );           
-          }else el+= ">" + MOD.mount( HTML[ data.mount ] ); 
-        }else el+= ">" + MOD.mount( data.mount[0] );   
-      }else if( data.mountMap ) { 
-        if( HTML[ data.mountMap ] ) el+= ">" + MOD.mountMap( HTML[ data.mountMap ] )
-        else el+= ">" + MOD.mountMap( data.mountMap[0] ) 
-      }else if( MOD.emptyElements.includes( data.tag ) ) { return el+"/>" }
-      else { el+=">" }
+      }else { el+=">" }
 
       return el+="</"+data.tag+">"
     },
@@ -177,15 +167,40 @@ var UTILS = {
     ev:( ev, mode ) => ev.target.attributes[ mode ].nodeValue
 }     
  
-var OBS = {} 
-
-HTML = ObservableSlim.create( OBS, true, function( changes ) {    
-
-  for( change in changes ){    
-    var currentPath = changes[ change ].currentPath 
+var DATA = {}
+var PROXY = {
+  keys: {},
+  get( target, key ) {
+    if( typeof target[key] === 'object' && target[key] !== null ){
+      return new Proxy(target[key], PROXY)
+    }else return target[key];
+  },
+  set( target, key, value ) {
+    var firstKey; this.keys = {};
+    target[ key ] = value    
+    for( index in DATA ) this.keys[ index ] = index
+    
+    for( index in this.keys ){             
+      for( index2 in DATA[ index ] ){        
+        if( DATA[ index ][ index2 ][ key ] ) {
+          this.elementChanged( index )
+          return 0
+        }
+      }
+    }    
+    
+    for( index in DATA ) if( DATA[ index ][ key ] ) firstKey = index      
+    if( firstKey ) this.elementChanged( firstKey )
+    else this.elementChanged( key )      
+     
+    return true
+  },
+  elementChanged( key ) {
+    console.log( "Changed path: " + key )    
+    var currentPath = key
     if( UTILS.contains( currentPath, "_" ) ) currentPath = currentPath.split("_")[0]
-    else currentPath = currentPath.split(".")[0]
-    if( currentPath ) DOM.update( currentPath ) 
+    if( currentPath ) DOM.update( currentPath )     
   }
-});  
- 
+}
+
+HTML = new Proxy( DATA, PROXY )
