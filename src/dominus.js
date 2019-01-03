@@ -8,6 +8,7 @@
  *  
  *	DOMinus.js is a reactive data binding library that turn HTML irrelevant.
  */  
+  
 var HTML = {} 
 
 var DOM = {
@@ -179,20 +180,17 @@ var PROXY = {
     var firstKey; this.keys = {};
     target[ key ] = value    
     for( index in DATA ) this.keys[ index ] = index
-    
     for( index in this.keys ){             
       for( index2 in DATA[ index ] ){        
-        if( DATA[ index ][ index2 ][ key ] ) {
-          this.elementChanged( index )
+        if( DATA[ index ][ index2 ][ key ] && DATA[ index ][ index2 ][ key ] == value ) {          
+          this.elementChanged( index )          
           return 0
         }
       }
-    }    
-    
+    }
     for( index in DATA ) if( DATA[ index ][ key ] ) firstKey = index      
     if( firstKey ) this.elementChanged( firstKey )
-    else this.elementChanged( key )      
-     
+    else this.elementChanged( key )  
     return true
   },
   elementChanged( key ) {
