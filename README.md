@@ -2,7 +2,7 @@
 
 DOMinus.js is a reactive data binding library that turn HTML irrelevant.
  
-### Version: 2.0.0 
+### Version: 2.0.1 
  
 ---
 
@@ -31,15 +31,19 @@ DOMinus.js is a reactive data binding library that turn HTML irrelevant.
 
 <script>
  
+var DOM = new Dominus()
+var HTML = DOM.HTML()
+ 
 HTML.element = {
   tag: "div",
-  id: "element", // or attrs: { id: "element" },
+  id: "element",
   html: "Hello World"
 }
 DOM.add("element", "#app")
 
 </script>
-//<div id="element" > Hello World </div>
+
+Result: <div id="element" > Hello World </div>
 ```
 
  ## Sandbox
@@ -73,7 +77,7 @@ The "HTML codes" now interest only for browsers.
  ```Javascript
  HTML.element = {
   tag: "div", 
-  id: "element", // or attrs: { id: "element" },
+  id: "element",  
   html: "hello"  
  }
  ```
@@ -114,15 +118,14 @@ The "HTML codes" now interest only for browsers.
  
 ## FAMILiarity
 
-Each element has three properties: tag, attrs and html; 
+Each element can have properties: tag, id, class, style, type, html, etc; 
  
    ```Javascript
 HTML.header = {
    tag: "ul", 
    id: "header",
    class: "myClass",
-   style: "color:red",
-   // or attrs: { id: "header", class: "myClass", style: "color:red" },
+   style: "color:red",   
    html: "header_content"  
 }
    ```
@@ -133,6 +136,12 @@ HTML.header = {
  
  Example:
  ```Javascript
+ HTML.header = {
+   tag: "ul",
+   id: "header",
+   html: "header_content"  
+ }
+
  HTML.header_content = [
   { tag:"li", id: "header_content_1", html: "0", class: "hide" },  
   { tag:"li", id: "header_content_2", html: "1", class: "hide" },
@@ -161,7 +170,6 @@ HTML.header = {
   id: "header",
   class: "myClass",
   style: "color:red",
-  // or attrs: { id: "header", class: "myClass", style: "color:red" },
   html: "header_content"  
  }
  
@@ -243,9 +251,11 @@ HTML.header = {
  delete HTML.header_contents[1]
    ```
 
-## Others methods
-### Add and Remove class
-```jasvascript
+## Methods
+```javascript
+DOM.add( "element", "#ID" )
+DOM.remove( "element" )
+DOM.get( "element" )
 DOM.class.add( "element", "newClass" )
 DOM.class.remove( "element", "newClass" )
 ```
@@ -262,5 +272,5 @@ DOM.class.remove( "element", "newClass" )
 
  [MIT](http://opensource.org/licenses/MIT)
 
-Copyright (c) Gurigraphics, 2018.
+Copyright (c) Gurigraphics, 2018 - 2019.
   
