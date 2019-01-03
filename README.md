@@ -240,7 +240,14 @@ HTML.header = {
   ```Javascript
  delete HTML.header_contents[1]
    ```
-  
+
+## Others methods
+### Add and Remove class
+```jasvascript
+DOM.class.add( "element", "newClass" )
+DOM.class.remove( "element", "newClass" )
+```
+
  And that is all.
  
  ---
