@@ -177,22 +177,16 @@ var PROXY = {
     }else return target[key];
   },
   set( target, key, value ) {
-    var firstKey; 
     this.keys = {};
-    target[ key ] = value  
-    
-    for( index in DATA ) this.keys[ index ] = index
-    
-    for( index in this.keys ){
-            
-      var string = JSON.stringify( DATA[ index ] );
-      
+    target[ key ] = value    
+    for( index in DATA ) this.keys[ index ] = index    
+    for( index in this.keys ){            
+      var string = JSON.stringify( DATA[ index ] );      
       if( this.obj[ index ] != string ){        
         this.obj[ index ] = string
         this.elementChanged( index )        
       }
-    }
-  
+    }  
     return true
   },
   elementChanged( key ) {
