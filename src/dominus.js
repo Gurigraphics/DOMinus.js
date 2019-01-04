@@ -1,12 +1,12 @@
- /*
+/*
  * 	DOMinus.js
- *	Version 2.0.3
+ *	 Version 2.0.4
  * 	https://github.com/Gurigraphics/DOMinus.js
  *
  * 	Licensed under the MIT license:
  * 	http://www.opensource.org/licenses/MIT
  *  
- *	DOMinus.js is a reactive data binding library that turn HTML irrelevant.
+ *	 DOMinus.js is a reactive data binding library that turn HTML irrelevant.
  */  
 var Dominus = function(){
 
@@ -101,7 +101,7 @@ var Dominus = function(){
         var el = "<"+data.tag  
         for( index in data ) {          
           if( index != "tag" && index != "html" ) {        
-            if( UTILS.verify( index ) ) { el+= (" "+index+"='"+data[ index ]+"' ") } 
+              el+= (" "+index+"='"+data[ index ]+"' ")  
           } 
         }
         
@@ -131,11 +131,6 @@ var Dominus = function(){
         if( UTILS.contains( html, symbol ) ) name = html.split( symbol )[1] 
         return name
       },
-      verify: ( value ) => {  
-        var array = [ "html", "mount", "mountMap", "tag" ]    
-        if( array.includes( value ) ) return false
-        else return true
-      },
       isArray: function( value ){ return value && typeof value === 'object' && value.constructor === Array },
       isString: ( value ) => typeof value === 'string' || value instanceof String, 
       ev:( ev, mode ) => ev.target.attributes[ mode ].nodeValue
@@ -151,7 +146,7 @@ var Dominus = function(){
     },
     set( target, key, value ) {
       this.keys = {};
-      target[ key ] = value    
+      target[ key ] = value
       this.update() 
       return true
     },
