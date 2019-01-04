@@ -111,7 +111,8 @@ var Dominus = function(){
           } 
         }            
 
-        if( data.html ) { 
+        if( MOD.emptyElements.includes( data.tag ) ) { return el+"/>" }
+        else if( data.html ) { 
           if( HTML[ data.html ] ){ el+= ">" + MOD.h( HTML[ data.html ] ) }
           else el+= ">" + data.html; 
         }else { el+=">" }
