@@ -18,28 +18,51 @@ METHODS.add = function( HTML_key ) {
    DOM.add(HTML_key,"#DOM_test")
 }
 
+METHODS.findFirstDiffPos=function (a, b) {
+    var longerLength = Math.max(a.length, b.length);
+    for (var i = 0; i < longerLength; i++) {
+        if (a[i] !== b[i]) return i;
+    }
+    return -1;
+};
+
 
 /* ----- VIEW ----- */
 
-VIEW.result = function() {
+VIEW.expected = function() {
   //console.log(document.getElementById("DOM_test").innerHTML);
   return document.getElementById("DOM_test").innerHTML;
 }
+
+VIEW.getMessage=function (isOk, actual, expected) {
+    var pos, message;
+    if (isOk) {
+        message="Passed : "+actual;
+    } else {
+        pos=METHODS.findFirstDiffPos(actual,expected);
+        message="Failed from |---| : "+actual.substr(0,pos)+"|---|"+actual.substr(pos) + " VS "+expected.substr(pos,10)+" ...";
+    }
+    return message;
+};
 
 
 /* ----- QUNIT ----- */
 
 QUNIT.run = function() {
-  for (var prop in QUNIT.tests) {
-    if ( QUNIT.tests.hasOwnProperty(prop)) {
-      (function (p) {
-        QUnit.test(prop, function (assert) {
-          assert.ok(QUNIT.tests[p]() === VIEW.result());
-        });
-      }(prop));
+    for (var prop in QUNIT.tests) {
+        if ( QUNIT.tests.hasOwnProperty(prop)) {
+            (function (p) {
+                var actual, isOk, expected, message;
+                expected=QUNIT.tests[p]();
+                isOk = (expected === (actual=VIEW.expected()));
+                message=VIEW.getMessage(isOk, actual, expected);
+                QUnit.test(prop, function (assert) {
+                    assert.ok(isOk, message);
+                });
+            }(prop));
+        }
     }
-  }
-}
+};
 
 QUNIT.tests["empty_element"]=function () {
     METHODS.newDOM();
