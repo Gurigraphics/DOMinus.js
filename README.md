@@ -2,7 +2,7 @@
 
 DOMinus.js is a reactive data binding library that turn HTML irrelevant.
  
-### Version: 2.0.3
+### Version: 2.0.4
  
 ---
 
