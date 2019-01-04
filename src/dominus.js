@@ -1,6 +1,6 @@
-/*
+ /*
  * 	DOMinus.js
- *	Version 2.0.2
+ *	Version 2.0.3
  * 	https://github.com/Gurigraphics/DOMinus.js
  *
  * 	Licensed under the MIT license:
@@ -90,7 +90,7 @@ var Dominus = function(){
   var MOD = {      
       emptyElements: [ "area","base","br","col","embed","hr","img","input",
               "keygen","link","meta","param","source","track","wbr" 
-             ],
+      ],
       h: function( data ){       
         if( UTILS.isArray( data ) ) {   
           return MOD.mountMap( data )
@@ -98,19 +98,13 @@ var Dominus = function(){
       },
       mount: function( data ){  
         if( !data.tag ) { data.tag = "div" }
-        var el = "<"+data.tag      
-        if( !data.attrs ){      
-          for( index in data ) {          
-            if( index != "tag" && index != "html" ) {        
-              if( UTILS.verify( index ) ) { el+= (" "+index+"='"+data[ index ]+"' ") } 
-            } 
-          }        
-        }else{
-          for( index in data.attrs ) { 
-            if( UTILS.verify( index ) ) { el+= (" "+index+"='"+data.attrs[ index ]+"' ") } 
+        var el = "<"+data.tag  
+        for( index in data ) {          
+          if( index != "tag" && index != "html" ) {        
+            if( UTILS.verify( index ) ) { el+= (" "+index+"='"+data[ index ]+"' ") } 
           } 
-        }            
-
+        }
+        
         if( MOD.emptyElements.includes( data.tag ) ) { return el+"/>" }
         else if( data.html ) { 
           if( HTML[ data.html ] ){ el+= ">" + MOD.h( HTML[ data.html ] ) }
@@ -118,34 +112,11 @@ var Dominus = function(){
         }else { el+=">" }
 
         return el+="</"+data.tag+">"
-      },
-      mounts: function( v0, v1, v2 ){ 
-        if( UTILS.isArray( v0 ) ){ var d=v0; v0=d[0]; v1=d[1]; v2=d[2]; }
-        if( HTML[v2] ){ var t=HTML[v2]; v2 = MOD.h( t ) }
-        else if( UTILS.isArray( v2 ) ){ var t=""; for( item in v2 ){ t+=v2[item]} v2=t; }
-        var x = {
-          tag: v0,
-          attrs: { ...v1 },
-          html: v2,
-        }  
-        return MOD.mount( x )
-      },
-      mountMap: function( us ) {
-        var x = "";
-        us.map(function( data, index ) {    
-          if( us[ index ].mountMap ){ 
-            var t = [ us[ index ].tag, { ...data }, "" ]
-            for( item in t[1]["mountMap"] ) t[2]+= MOD.mountMap( t[1]["mountMap"][0] ); 
-            delete t[1].mountMap
-            x+= MOD.mounts( t[0], t[1], t[2] ) 
-          }else{
-            if( us[ index ].html ) x+= MOD.mounts( us[ index ].tag, us[ index ], us[ index ].html )
-            else if( us[ index ].mount ){
-              x+= MOD.mounts( us[ index ].tag, us[ index ], MOD.mount( us[ index ].mount[0] ) )          
-            } 
-          } 
-        })   
-        return x         
+      },     
+      mountMap: function( childs ) {         
+        var html = "";
+        childs.map(function( data, index ) { html+= MOD.mount( childs[ index ] ) })   
+        return html        
       }  
   }
 
@@ -161,7 +132,7 @@ var Dominus = function(){
         return name
       },
       verify: ( value ) => {  
-        var array = [ "html", "mount", "mountMap", "mounts", "tag" ]    
+        var array = [ "html", "mount", "mountMap", "tag" ]    
         if( array.includes( value ) ) return false
         else return true
       },
@@ -181,8 +152,8 @@ var Dominus = function(){
     set( target, key, value ) {
       this.keys = {};
       target[ key ] = value    
-      this.update()
-      return true;
+      this.update() 
+      return true
     },
     deleteProperty: function( target, key ) {
       if( key in target ) {
@@ -190,6 +161,7 @@ var Dominus = function(){
         console.log(`Removed key: ${ key }`);
         this.update() 
       }
+      return true
     },
     update() {
       for( index in DATA ) this.keys[ index ] = index    
@@ -232,3 +204,4 @@ var Dominus = function(){
     HTML: () => HTML    
   }
 }
+ 
