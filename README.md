@@ -2,7 +2,7 @@
 
 DOMinus.js is a reactive data binding library that turn HTML irrelevant.
  
-### Version: 2.0.4
+### Version: 2.0.5
  
 ---
 
@@ -258,6 +258,10 @@ DOM.remove( "element" )
 DOM.get( "element" )
 DOM.class.add( "element", "newClass" )
 DOM.class.remove( "element", "newClass" )
+DOM.newID() // return new ID number
+DOM.getValue("#id") // get value of a element
+DOM.getParentID("#id") // get ID of parent element
+DOM.getEventAttr(event, "attribute type" ) // get attribute value of an element
 ```
 
  And that is all.
