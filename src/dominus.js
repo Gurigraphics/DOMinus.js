@@ -1,6 +1,6 @@
 /*
  * 	DOMinus.js
- *	Version 2.0.5
+ *	Version 2.0.6
  * 	https://github.com/Gurigraphics/DOMinus.js
  *
  * 	Licensed under the MIT license:
@@ -15,17 +15,14 @@ var Dominus = function(){
   var DOM = {
       RENDER: [],
       ID: 100,
-      newID: function(){
+      newID(){
         this.ID+=1
         return this.ID
       },
       class: {
-        add: function( el, classe ){        
-          HTML[ el ].class = HTML[ el ].class + " " + classe
-        },
-        remove: function( el, classe ){
-          var oldClasses = HTML[ el ].class.split(" ")
-          var newClasses = "";
+        add( el, classe ){ HTML[ el ].class = HTML[ el ].class + " " + classe },
+        remove( el, classe, newClasses = "" ){
+          var oldClasses = HTML[ el ].class.split(" ")  
           for( index in oldClasses ){
             if( oldClasses[ index ] != classe && oldClasses[ index ] ){
               newClasses = newClasses + " " + oldClasses[ index ]
@@ -34,18 +31,16 @@ var Dominus = function(){
           HTML[ el ].class = newClasses.substring(1)
         }      
       },
-      get: function( el ){
-         if( UTILS.contains( el, "." ) ) { 
-           return document.getElementsByClassName( UTILS.subs( el ) )[0]
-         }else if( UTILS.contains( el, "#" ) ){ 
-           return document.getElementById( UTILS.subs( el ) ) 
-         }else { 
-           return document.getElementsByTagName( el )[0] 
-         }
+      get( el ){
+        return(
+          UTILS.contains( el, "." ) ? document.getElementsByClassName( UTILS.subs( el ) )[0] :
+          UTILS.contains( el, "#" ) ? document.getElementById( UTILS.subs( el ) ) :
+          document.getElementsByTagName( el )[0]          
+        )
       },
       getParentID: ( id ) => id.split("_").slice(0, -1).join("_"),
       getValue: ( id ) => DOM.get( id ).value,              
-      add: function( html, el ){  
+      add( html, el ){  
          DOM.RENDER[ html ] = [ el, html ]
          DOM.update( html )
       },
@@ -57,32 +52,25 @@ var Dominus = function(){
            UTILS.log( "updated", el ) // log
          } 
       },
-      draw: ( el, content ) => {       
-        if( !content ) DOM.none( el )
-        else if( !UTILS.contains( content, "<undefined>" ) ) DOM.get( el ).innerHTML = content
-        else DOM.none( el )
+      draw: ( el, content ) => {  
+        !content ? DOM.none( el ) :
+        !UTILS.contains( content, "<undefined>" ) ? DOM.get( el ).innerHTML = content : DOM.none( el )
       },
-      none: ( el ) => { 
-        DOM.get( el ).innerHTML = " "
-      },
-      remove: function( id ){ 
-        
+      none: ( el ) => DOM.get( el ).innerHTML = " ",
+      remove( id ){        
         if( HTML[ id ] ) delete HTML[ id ] 
         else{          
-          var parentID = DOM.getParentID( id )
-          
+          var parentID = DOM.getParentID( id )          
           if( HTML[ parentID ] ){
-             for( index in HTML[ parentID ] ){
-
-                if( HTML[ parentID ][ index ].id == id  ){
-
-                  var html = HTML[ parentID ][ index ].html
-                  if( HTML[ html ] ){
-                    delete HTML[ parentID ][ index ]
-                    delete HTML[ html ]       
-                  }else delete HTML[ parentID ][ index ] 
-                } 
-              }
+            for( index in HTML[ parentID ] ){
+              if( HTML[ parentID ][ index ].id == id ){
+                var html = HTML[ parentID ][ index ].html
+                if( HTML[ html ] ){
+                  delete HTML[ parentID ][ index ]
+                  delete HTML[ html ]       
+                }else delete HTML[ parentID ][ index ] 
+              } 
+            }
           }                 
         }
       }   
@@ -92,19 +80,11 @@ var Dominus = function(){
       emptyElements: [ "area","base","br","col","embed","hr","img","input",
               "keygen","link","meta","param","source","track","wbr" 
       ],
-      h: function( data ){       
-        if( UTILS.isArray( data ) ) {   
-          return MOD.mountMap( data )
-        }else return data ? MOD.mount( data ) : 0
-      },
-      mount: function( data ){  
-        if( !data.tag ) { data.tag = "div" }
+      h: ( data ) => ( UTILS.isArray( data ) ) ? MOD.mountMap( data ) : data ? MOD.mount( data ) : 0,     
+      mount( data ){  
+        !data.tag ? data.tag = "div" : 0
         var el = "<"+data.tag  
-        for( index in data ) {          
-          if( index != "tag" && index != "html" ) {        
-              el+= (" "+index+"='"+data[ index ]+"' ")  
-          } 
-        }
+        for( index in data ) index != "tag" && index != "html" ? el+= (" "+index+"='"+data[ index ]+"' ") : 0 
         
         if( MOD.emptyElements.includes( data.tag ) ) { return el+"/>" }
         else if( data.html ) { 
@@ -114,50 +94,43 @@ var Dominus = function(){
 
         return el+="</"+data.tag+">"
       },     
-      mountMap: function( childs ) {         
-        var html = "";
-        childs.map(function( data, index ) { html+= MOD.mount( childs[ index ] ) })   
+      mountMap( childs, html = "" ) { 
+        childs.map( ( data, index ) => { html+= MOD.mount( childs[ index ] ) } ) 
         return html        
       }  
   }
 
   var UTILS = { 
-      subs: function( str ){ return str.substring(1)  },
-      contains: function( el, value ){  
-        if( el.indexOf( value ) !== -1) return true
-        else return false
-      },
-      removeThis: async function( html, symbol ){  
-        var name = html
-        if( UTILS.contains( html, symbol ) ) name = html.split( symbol )[1] 
-        return name
-      },
-      isArray: function( value ){ return value && typeof value === 'object' && value.constructor === Array },
+      subs: ( str ) => str.substring(1),   
+      contains: ( el, value ) => ( el.indexOf( value ) !== -1 ? true : false ),   
+      isArray: ( value ) => value && typeof value === 'object' && value.constructor === Array,
       isString: ( value ) => typeof value === 'string' || value instanceof String, 
       getEventAttr:( ev, mode ) => ev.target.attributes[ mode ].nodeValue,   
-      log( message, value ) { 
-             if( message == "deleted" ) console.log(`Removed: ${ value }`);
-        else if( message == "changed" ) console.log(`Changed path: ${ value }`);
-        else if( message == "updated" ) console.log(`Updated path: ${ value }`);
-      }          
-  }  
+      log( message, value, text = "" ) {        
+         message == "deleted" ? text = "Removed:" : 
+         message == "changed" ? text = "Changed path:" : text = "Updated path:"
+         console.log(`${ text } ${ value }`);
+      }    
+  } 
   
   var PROXY = {
     keys: {},
     obj: {},
     get( target, key ) {
-      if( typeof target[key] === 'object' && target[key] !== null ){
-        return new Proxy(target[key], PROXY)
-      }else return target[key];
+      return( 
+        typeof target[ key ] === 'object' && target[ key ] !== null ? 
+        new Proxy( target[ key ], PROXY ) : 
+        target[ key ] 
+      )
     },
     set( target, key, value ) {    
       target[ key ] = value
-      if( target.id ) this.elementChanged( target.id ) 
-      else if( value.id ) this.elementChanged( value.id )
+      target.id ? this.elementChanged( target.id ) : 
+      value.id  ? this.elementChanged( value.id ) : 0 
       return true
     },
-    deleteProperty: function( target, key ) { 
-      
+    deleteProperty( target, key ) { 
+    
       if( key in target ) {
         
         var id = target[ key ].id
@@ -177,9 +150,9 @@ var Dominus = function(){
      
       return true
     },
-    elementChanged( currentPath ) {  
-      if( UTILS.contains( currentPath, "_" ) ) DOM.update( currentPath.split("_")[0] ) 
-      else DOM.update( currentPath ) 
+    elementChanged( currentPath ) {      
+      UTILS.contains( currentPath, "_" ) ? DOM.update( currentPath.split("_")[0] ) : 
+      DOM.update( currentPath ) 
       UTILS.log( "changed", currentPath ) // log
     }
   }
