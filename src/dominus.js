@@ -1,6 +1,6 @@
 /*
  * 	DOMinus.js
- *	Version 2.0.6
+ *	Version 2.0.7
  * 	https://github.com/Gurigraphics/DOMinus.js
  *
  * 	Licensed under the MIT license:
@@ -12,6 +12,9 @@ var Dominus = function(){
 
   var HTML = {} 
   var DATA = {}
+  var TEMPLATE = {}
+  var FACTORY = {}
+  var EVENTS = {}
   var DOM = {
       RENDER: [],
       ID: 100,
@@ -40,10 +43,8 @@ var Dominus = function(){
       },
       getParentID: ( id ) => id.split("_").slice(0, -1).join("_"),
       getValue: ( id ) => DOM.get( id ).value,              
-      add( html, el ){  
-         DOM.RENDER[ html ] = [ el, html ]
-         DOM.update( html )
-      },
+      add: ( html, el ) => { UTILS.contains( html, "<" ) ? DOM.draw( el, html ) : DOM.render( html, el ) },
+      render: ( html, el ) => { DOM.RENDER[ html ] = [ el, html ]; DOM.update( html ) },
       getRender: ( name ) => DOM.RENDER[ name ],
       update: async function( el ){ 
          var r = DOM.getRender( el ) 
@@ -80,16 +81,28 @@ var Dominus = function(){
       emptyElements: [ "area","base","br","col","embed","hr","img","input",
               "keygen","link","meta","param","source","track","wbr" 
       ],
-      h: ( data ) => ( UTILS.isArray( data ) ) ? MOD.mountMap( data ) : data ? MOD.mount( data ) : 0,     
-      mount( data ){  
+      h: ( data ) => data.template ? MOD.template( data ) :
+                     UTILS.isArray( data ) ? MOD.mountMap( data ) : 
+                     data ? MOD.mount( data ) : 0, 
+      template: ( data ) => {
+        const { template, html, ...newData } = data;        
+        if( UTILS.contains( data.template, "<" ) ) newData["html"] = data.template
+        else if( !UTILS.isString( TEMPLATE[ data.template ] ) ){
+          UTILS.isArray( TEMPLATE[ data.template ].props ) ?            
+          newData["html"] = FACTORY[ TEMPLATE[ data.template ].factory ]( ...TEMPLATE[ data.template ].props ) :
+          newData["html"] = FACTORY[ TEMPLATE[ data.template ].factory ]( TEMPLATE[ data.template ].props )
+        }else newData["html"] = TEMPLATE[ data.template ]
+        
+        return MOD.h( newData )
+      },
+      mount( data ){               
         !data.tag ? data.tag = "div" : 0
         var el = "<"+data.tag  
         for( index in data ) index != "tag" && index != "html" ? el+= (" "+index+"='"+data[ index ]+"' ") : 0 
         
         if( MOD.emptyElements.includes( data.tag ) ) { return el+"/>" }
         else if( data.html ) { 
-          if( HTML[ data.html ] ){ el+= ">" + MOD.h( HTML[ data.html ] ) }
-          else el+= ">" + data.html; 
+          HTML[ data.html ] ? el+= ">" + MOD.h( HTML[ data.html ] ) : el+= ">" + data.html        
         }else { el+=">" }
 
         return el+="</"+data.tag+">"
@@ -119,14 +132,14 @@ var Dominus = function(){
     get( target, key ) {
       return( 
         typeof target[ key ] === 'object' && target[ key ] !== null ? 
-        new Proxy( target[ key ], PROXY ) : 
-        target[ key ] 
+        new Proxy( target[ key ], PROXY ) : target[ key ] 
       )
     },
-    set( target, key, value ) {    
+    set( target, key, value ) {  
       target[ key ] = value
       target.id ? this.elementChanged( target.id ) : 
-      value.id  ? this.elementChanged( value.id ) : 0 
+      value.id  ? this.elementChanged( value.id ) :
+      target[0] ? this.elementChanged( target[0].id.split("_")[0] ) : 0
       return true
     },
     deleteProperty( target, key ) { 
@@ -150,7 +163,7 @@ var Dominus = function(){
      
       return true
     },
-    elementChanged( currentPath ) {      
+    elementChanged( currentPath ) {
       UTILS.contains( currentPath, "_" ) ? DOM.update( currentPath.split("_")[0] ) : 
       DOM.update( currentPath ) 
       UTILS.log( "changed", currentPath ) // log
@@ -164,6 +177,7 @@ var Dominus = function(){
     add: ( html, el ) => DOM.add( html, el ), 
     remove: ( id ) => DOM.remove( id ),
     get: ( id ) => DOM.get( id ),
+    h: ( el ) => MOD.h.bind({}),
     getEventAttr: ( ev, mode ) => UTILS.getEventAttr( ev, mode ),
     getValue: ( id ) => DOM.getValue( id ),
     getParentID: ( id ) => DOM.getParentID( id ), 
@@ -171,7 +185,10 @@ var Dominus = function(){
       add:    ( el, classe ) => DOM.class.add( el, classe ),
       remove: ( el, classe ) => DOM.class.remove( el, classe )
     },
-    HTML: () => HTML    
+    HTML: () => HTML,
+    TEMPLATE: () => TEMPLATE,
+    FACTORY: () => FACTORY,
+    EVENTS: () => EVENTS
   }
 }
  
