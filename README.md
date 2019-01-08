@@ -172,11 +172,11 @@ Each element can have properties: tag, id, class, style, type, html, etc;
  
    ```Javascript
 HTML.header = {
-   tag: "ul", 
-   id: "header",
-   class: "myClass",
-   style: "color:red",   
-   html: "header_content"  
+     tag: "ul", 
+     id: "header",
+     class: "myClass",
+     style: "color:red",   
+     html: "header_content"  
 }
    ```
    
