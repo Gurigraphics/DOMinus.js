@@ -46,6 +46,56 @@ DOM.add("element", "#app")
 Result: <div id="element" > Hello World </div>
 ```
 
+## How create elements without reactivity
+```
+var DOM = new Dominus()
+var HTML = DOM.HTML()
+var h = DOM.h();
+
+var div = h({ 
+  tag: "ul", 
+  html: h( [
+    { tag: "li", html: "item1" },
+    { tag: "li", html: "item2" },
+    { tag: "li", html: "item3" },
+  ])
+})
+
+DOM.add( div, "#app" )
+
+Result: 
+<ul> 
+  <li>item1</li>
+  <li>item2</li>
+  <li>item3</li>
+</ul>
+```
+## How use templates
+
+```
+var DOM = new Dominus()
+var HTML = DOM.HTML()
+var TEMPLATE = DOM.TEMPLATE()
+var FACTORY = DOM.FACTORY()
+var h = DOM.h();
+
+FACTORY.base = function( value ){
+  return h({
+      id: "parent",
+      html: h({ id: "child", html: value })
+  })
+}
+
+TEMPLATE.name1 = FACTORY.base("name1")
+TEMPLATE.name2 = FACTORY.base("name2")
+
+HTML.element = { id:"element", template: "name1" } 
+
+DOM.add("element", "#app")
+
+// HTML.element.template = "name2" // change template
+```
+
  ## Sandbox
 
 https://playcode.io/180373/v2
