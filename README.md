@@ -2,25 +2,43 @@
 
 DOMinus.js is a reactive data binding library that turn HTML irrelevant.
  
-### Version: 2.0.7
+### Version: 2.0.8
  
 ---
 
  ## What this make?
   
  Change "**data**" -> Change "**view**" automagically
+
+DIV:
+ ```HTML
+<div id="element"></div>
+```
+Code:
  ```Javascript
- //<div id="element"></div>
-
- HTML.element.html = "hello world" 
- //<div id="element"> hello world </div>
+HTML.element.html = "hello world" 
+```
+Result:
+ ```Javascript
+<div id="element"> hello world </div>
+```
+Code:
+ ```Javascript
+HTML.element.tag = "button"
+```
+Result:
+ ```Javascript
+<button id="element"> hello world </button>
+```
+Code:
+ ```Javascript
+HTML.element.onclick = "go()"
+```
+Result:
+ ```Javascript
+<button id="element" onclick="go()"> hello world </button> 
+```
  
- HTML.element.tag = "button"
- //<button id="element"> hello world </button>
-
- HTML.element.onclick = "go()"
- //<button id="element" onclick="go()"> hello world </button> 
-  ```
   
   ---
   
@@ -53,49 +71,18 @@ var HTML = DOM.HTML()
 var h = DOM.h();
 
 var div = h({ 
-  tag: "ul", 
-  html: h( [
-    { tag: "li", html: "item1" },
-    { tag: "li", html: "item2" },
-    { tag: "li", html: "item3" },
-  ])
+  tag: "button", 
+  id: "name",
+  class: "class1 class2",  
+  html: "content"
 })
 
-DOM.add( div, "#app" )
+console.log( div )
 
 Result: 
-<ul> 
-  <li>item1</li>
-  <li>item2</li>
-  <li>item3</li>
-</ul>
+<button id="name" class="class1 class2"> content </button>
 ```
-## How use templates
-
-```
-var DOM = new Dominus()
-var HTML = DOM.HTML()
-var TEMPLATE = DOM.TEMPLATE()
-var FACTORY = DOM.FACTORY()
-var h = DOM.h();
-
-FACTORY.base = function( value ){
-  return h({
-      id: "parent",
-      html: h({ id: "child", html: value })
-  })
-}
-
-TEMPLATE.name1 = FACTORY.base("name1")
-TEMPLATE.name2 = FACTORY.base("name2")
-
-HTML.element = { id:"element", template: "name1" } 
-
-DOM.add("element", "#app")
-
-// HTML.element.template = "name2" // change template
-```
-
+ 
  ## Sandbox
 
 https://playcode.io/180373/v2
@@ -192,10 +179,7 @@ HTML.header = {
    html: "header_content"  
  }
 
- HTML.header_content = [
-  { tag:"li", id: "header_content_1", html: "0", class: "hide" },  
-  { tag:"li", id: "header_content_2", html: "1", class: "hide" },
- ] 
+ HTML.header_content = { tag:"li", html: "0", class: "show" }
  ```
  
  Then this:
@@ -207,7 +191,6 @@ HTML.header = {
  ```Html
  <ul id="header">  
   <li id="header_content_1" class= "hide"> 0 </li>
-  <li id="header_content_2" class= "hide"> 1 </li>
  </ul>
   ```
   
@@ -215,42 +198,32 @@ HTML.header = {
 
 ### That's Clean Code! 
  ```Javascript
- HTML.header = {
+
+HTML.header_content_1 = { tag:"li", id: "header_content_1", class: "hide", html: "0"},  
+HTML.header_content_2 = { tag:"ul", id: "header_content_2", html: "header_contentList" } 
+HTML.header_contentList = { tag:"li", html: "1" }
+
+HTML.header = {
   tag: "ul", 
   id: "header",
   class: "myClass",
   style: "color:red",
-  html: "header_content"  
+  html: [ "header_content_1", "header_content_2" ]
  }
- 
- HTML.header_content = [
-  { tag:"li", id: "header_content_1", html: "0",  class: "hide" },  
-  { tag:"ul", id: "header_content_2", html: "header_contentList",  class: "hide" },
- ] 
- 
- HTML.header_contentList = [
-  { tag:"li", id: "header_contentList_1", html: "0",  class: "hide" },  
-  { tag:"li", id: "header_contentList_2", html: "1",  class: "hide" },
- ] 
- 
+  
  DOM.add( "header", "#app" )
  ```
-
- 
-  ### That's Spaghetti Code generate! 
+Result:
 ```Html
 <div id="app">
   <ul id="header" class="myClass" style="color:red">
       <li id="header_content_1" class="hide">0</li>
-      <ul id="header_content_2" class="hide">
-        <li id="header_contentList_1" class="hide">0</li>
-        <li id="header_contentList_2" class="hide">1</li>
+      <ul id="header_content_2">
+        <li>1</li>       
       </ul>
   </ul>
 </div>
 ```
-
----
  
 ## TERRITORiality
 
@@ -286,32 +259,53 @@ HTML.header = {
  
  Use the same convention to IDs
  ```Javascript
- HTML.header_contents = [
-  { tag:"li", id: "header_contents_child1", class: "hide", html: "11 " },  
-  { tag:"li", id: "header_contents_child2", class: "hide", html: "12" },
- ] 
+ HTML.header_contents
+ HTML.header_contents_child1"
+ HTML.header_contents_child2"
+
   ```
  So, you can remove "header_contents_child2" of "header_contents" with:
-  ```Javascript
- DOM.remove( "header_contents_child2" )
-  ```
 
- Or delete by keys that also works:
   ```Javascript
- delete HTML.header_contents[1]
+ delete HTML.header_contents_child2
    ```
 
 ## Methods
 ```javascript
-DOM.add( "element", "#ID" )
-DOM.remove( "element" )
-DOM.get( "element" )
-DOM.class.add( "element", "newClass" )
-DOM.class.remove( "element", "newClass" )
-DOM.newID() // return new ID number
-DOM.getValue("#id") // get value of a element
-DOM.getParentID("#id") // get ID of parent element
-DOM.getEventAttr(event, "attribute type" ) // get attribute value of an element
+
+DOM.add( "element", "#app" )
+DOM.get( "#app" )
+
+```
+
+## Methods like Jquery - without reactivity
+```javascript
+    
+var $ = DOM.get
+
+$("#id").removeClass("foo") 
+$(".class").addClass("foo")   
+$("body").hasClass("foo") 
+$("#id").toogleClass("foo") 
+$("#id").hide() 
+$("#id").show() 
+$("#id").val() 
+$("#id").html("text") 
+$("#id").append("<div>after</div>") 
+$("#id").prepend("<div>before</div>") 
+```
+## Methods js native
+```javascript
+$("#input").id
+$("#input").name
+$("#input").classList
+$("#input").children
+$("#input").childNodes
+$("#input").parentNode
+$("#input").parentElement
+$("#input").nextElementSibling
+$("#input").previousElementSibling
+Etc
 ```
 
  And that is all.
