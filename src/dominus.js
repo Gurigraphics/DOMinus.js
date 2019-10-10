@@ -147,7 +147,8 @@ var Dominus = function(){
   HTML = new Proxy( DATA, PROXY )
 
   return{
-    add: ( html, el ) => DOM.add( html, el ), 
+    add: ( html, el ) => DOM.add( html, el ),
+    get: ( el ) => DOM.get( el ), 
     h: ( el ) => MOD.h.bind({}), 
     HTML: () => HTML,  
     EVENTS: () => EVENTS
