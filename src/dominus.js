@@ -1,6 +1,6 @@
 /*
  * 	DOMinus.js
- *	Version 2.0.8
+ *	Version 2.0.9
  * 	https://github.com/Gurigraphics/DOMinus.js
  *
  * 	Licensed under the MIT license:
@@ -43,10 +43,19 @@ var Dominus = function(){
           el[0].prepend = ( content ) => el.forEach(function(els){ els.insertAdjacentHTML('afterbegin', content ) })
           return el[0]
         }     
+      },                 
+      add: ( html, el ) => {   
+        for( index in HTML ){          
+          if( HTML[ index ] && HTML[ index ].html ){
+            if( UTILS.isArray( HTML[ index ].html ) ){
+              for( items in HTML[ index ].html ){          
+                if( !HTML[ HTML[ index ].html[items ] ].parent ) HTML[ HTML[ index ].html[items ] ].parent = index 
+              }
+            }else if( HTML[ HTML[ index ].html ] ) HTML[ HTML[ index ].html ].parent = index 
+          }
+        }    
+        UTILS.contains( html, "<" ) ? DOM.draw( el, html ) : DOM.render( html, el ) 
       },
-      getParentID: ( id ) => id.split("_").slice(0, -1).join("_"),
-      getValue: ( id ) => DOM.get( id ).value,              
-      add: ( html, el ) => { UTILS.contains( html, "<" ) ? DOM.draw( el, html ) : DOM.render( html, el ) },
       render: ( html, el ) => { DOM.RENDER[ html ] = [ el, html ]; DOM.update( html ) },
       getRender: ( name ) => DOM.RENDER[ name ],
       update: async function( el ){ 
@@ -54,7 +63,7 @@ var Dominus = function(){
          if( r ) { 
            DOM.draw( r[0], MOD.h( HTML[ r[1] ] ) )           
            UTILS.log( "updated", el ) // log
-         } 
+         }         
       },
       draw: ( el, content ) => {  
         !content ? DOM.none( el ) :
@@ -81,7 +90,7 @@ var Dominus = function(){
         else if( data.html ) {   
           HTML[ data.html ] ? el+= ">" + MOD.h( HTML[ data.html ] ) : 
           UTILS.isArray( data.html ) ? el+= ">" + MOD.x( data.html ) : el+= ">" + data.html     
-        }else { el+=">" }
+        }else { el+=">" }  
         return el+="</"+data.tag+">"
       },     
       mountMap( childs, html = "" ) { 
@@ -94,7 +103,8 @@ var Dominus = function(){
       subs: ( str ) => str.substring(1),   
       contains: ( el, value ) => ( el.indexOf( value ) !== -1 ? true : false ),   
       isArray: ( value ) => value && typeof value === 'object' && value.constructor === Array,
-      isString: ( value ) => typeof value === 'string' || value instanceof String,  
+      isString: ( value ) => typeof value === 'string' || value instanceof String, 
+      removeArray: ( change, id ) => { HTML[ change ].html = HTML[ change ].html.filter(value => value !== id ) },  
       log( message, value, text = "" ) {        
          message == "deleted" ? text = "Removed:" : 
          message == "changed" ? text = "Changed path:" : text = "Updated path:"
@@ -105,52 +115,53 @@ var Dominus = function(){
   var PROXY = {
     keys: {},
     obj: {},
-    get( target, key ) {
+    get( target, key ) { 
+      PROXY.changed = key    
       return( 
         typeof target[ key ] === 'object' && target[ key ] !== null ? 
         new Proxy( target[ key ], PROXY ) : target[ key ] 
       )
     },
-    set( target, key, value ) {  
-      target[ key ] = value
-      target.id ? this.elementChanged( target.id ) : 
-      value.id  ? this.elementChanged( value.id ) :
-      target[0] && target[0].id ? this.elementChanged( target[0].id.split("_")[0] ) : 0
-      return true
+    set( target, key, value, receiver, change ){  
+      change = PROXY.changed
+      target[ key ] = value   
+      if( change ) PROXY.change( change ) 
     },
-    deleteProperty( target, key ) {     
-      if( key in target ) {        
-        var id = target[ key ].id
+    change( change ){      
+      if( HTML[ change ] && HTML[ change ].parent ){ 
+        PROXY.elementChanged( HTML[ change ].parent ) 
+      }else PROXY.elementChanged( change )
+    },
+    deleteProperty( target, key, change ) {       
+      if( key in target ){
+        if( HTML[ key ] && HTML[ key ].parent ) change = HTML[ key ].parent 
         delete target[ key ]
-        var parent = DOM.getParentID(id)
-        parent ? HTML[ parent ].html = HTML[ parent ].html.filter(value => value !== id ) : 0   
-        if( id ){
-          this.elementChanged( id )
-          UTILS.log( "deleted", id ) // log
-        }else if( target.id ){
-          this.elementChanged( target.id )
-          UTILS.log( "deleted", target.id ) // log
-        }else{
-          this.elementChanged( key )
-          UTILS.log( "deleted", key ) // log
-        }
-      }     
-      return true
+        PROXY.remove( key ) 
+        if( change ) PROXY.elementChanged( change )  
+        else PROXY.elementChanged( key ) 
+        UTILS.log( "deleted", key )
+      }           
     },
-    elementChanged( currentPath ) {
-      UTILS.contains( currentPath, "_" ) ? DOM.update( currentPath.split("_")[0] ) : 
-      DOM.update( currentPath ) 
-      UTILS.log( "changed", currentPath ) // log
+    remove( currentPath ){    
+      for( index in HTML ){
+        if( UTILS.isArray( HTML[ index ].html ) && HTML[ index ].html.includes( currentPath ) ){          
+          UTILS.removeArray( index, currentPath )
+        }else if( HTML[ index ].html == currentPath ) HTML[ index ].html = ""
+      }
+    },
+    elementChanged( currentPath ){ 
+      DOM.update( currentPath )
+      UTILS.log( "changed", currentPath )
     }
   }
 
   HTML = new Proxy( DATA, PROXY )
 
   return{
-    add: ( html, el ) => DOM.add( html, el ),
+    add: ( html, el ) => DOM.add( html, el ), 
     get: ( el ) => DOM.get( el ), 
-    h: ( el ) => MOD.h.bind({}), 
-    HTML: () => HTML,  
+    h: ( el ) => MOD.h.bind({}),
+    HTML: () => HTML,   
     EVENTS: () => EVENTS
   }
 }
