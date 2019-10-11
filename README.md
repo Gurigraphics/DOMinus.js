@@ -2,13 +2,13 @@
 
 DOMinus.js is a reactive data binding library that turn HTML irrelevant.
  
-### Version: 2.0.8
+### Version: 2.0.9
  
 ---
 
  ## What this make?
   
- Change "**data**" -> Change "**view**" automagically
+ Change "**data**" -> change "**view**" automagically
 
 DIV:
  ```HTML
@@ -52,8 +52,7 @@ Result:
 var DOM = new Dominus()
 var HTML = DOM.HTML()
  
-HTML.element = {
-  tag: "div",
+HTML.element = { 
   id: "element",
   html: "Hello World"
 }
@@ -96,7 +95,6 @@ https://playcode.io/180373/v2
  * **REACTivity**
  * **FAMILiarity**
  * **TERRITORiality**
- * **CONVENTionality**
  
  ---
  
@@ -194,7 +192,7 @@ HTML.header = {
  </ul>
   ```
   
- You can chain several elements inside others elements to create your "components".
+ You can chain several elements inside others elements to create "components" and "entities".
 
 ### That's Clean Code! 
  ```Javascript
@@ -202,12 +200,10 @@ HTML.header = {
 HTML.header_content_1 = { tag:"li", id: "header_content_1", class: "hide", html: "0"},  
 HTML.header_content_2 = { tag:"ul", id: "header_content_2", html: "header_contentList" } 
 HTML.header_contentList = { tag:"li", html: "1" }
-
 HTML.header = {
   tag: "ul", 
   id: "header",
-  class: "myClass",
-  style: "color:red",
+  style: "color: red",
   html: [ "header_content_1", "header_content_2" ]
  }
   
@@ -216,7 +212,7 @@ HTML.header = {
 Result:
 ```Html
 <div id="app">
-  <ul id="header" class="myClass" style="color:red">
+  <ul id="header" style="color:red">
       <li id="header_content_1" class="hide">0</li>
       <ul id="header_content_2">
         <li>1</li>       
@@ -227,47 +223,28 @@ Result:
  
 ## TERRITORiality
 
- For updates occur only in this "territory" or "region" or "group of elements", create different elements inside "HTML".
- 
- Example:
- ```Javascript
- HTML.header = {} 
- HTML.footer = {}
- HTML.other = {}
+ All the childs of an element receive the tag "parent" with the parent name.
+  ```Javascript
+ HTML.child1 = { 
+   html: "content"
+ } 
+ HTML.header = {
+   id: "header", 
+   html: "child1"
+ } 
+ DOM.add("header", "#app")
+
+ Result: 
+<div id="header">
+   <div parent="header">content</div>
+</div>
  ```
- 
- Thus, changes in "HTML.other and its children" update only "HTML.other and its children" in DOM. 
- 
- As a result, you control which "territories" are updated with what object modifications.
- 
- ---
- 
-## CONVENTionality
- 
- To define that an object is "parent" or "child" of other uses the convention: parent_child.
- 
- Example: 
-  ```Javascript
-  HTML.footer
-  HTML.footer_content
-  HTML.footer_content_tab 
-  ```
+ Then, when a child is changed, parent is updated.
   
- This "footer_" indicates that "HTML.footer" is the "start point" to update DOM. 
- 
- So, modifications made in an object with this "initial name" will affect only this group.
- 
- Use the same convention to IDs
- ```Javascript
- HTML.header_contents
- HTML.header_contents_child1"
- HTML.header_contents_child2"
-
-  ```
- So, you can remove "header_contents_child2" of "header_contents" with:
+ To remove an element:
 
   ```Javascript
- delete HTML.header_contents_child2
+ delete HTML.child1
    ```
 
 ## Methods
