@@ -165,4 +165,5 @@ var Dominus = function(){
     EVENTS: () => EVENTS
   }
 }
-export { Dominus }
+
+module.exports = Dominus 

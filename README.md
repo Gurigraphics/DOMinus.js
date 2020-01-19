@@ -63,6 +63,32 @@ DOM.add("element", "#app")
 Result: <div id="element" > Hello World </div>
 ```
 
+## How use with NPM
+
+```
+npm i dominusjs 
+```
+
+```Html
+<script>
+ 
+const Dominus = require("Dominusjs") 
+
+var DOM = new Dominus()
+var HTML = DOM.HTML()
+ 
+HTML.element = { 
+  id: "element",
+  html: "Hello World"
+}
+DOM.add("element", "#app")
+
+</script>
+
+Result: <div id="element" > Hello World </div>
+```
+
+
 ## How create elements without reactivity
 ```
 var DOM = new Dominus()
