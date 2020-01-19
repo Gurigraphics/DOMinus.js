@@ -1,0 +1,19 @@
+{
+  "name": "dominusjs",
+  "version": "2.0.9",
+  "description": "DOMinus.js is a reactive data binding library that turn HTML irrelevant.",
+  "main": "src/dominus.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Gurigraphics/DOMinus.js.git"
+  },
+  "author": "Gurigraphics",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/Gurigraphics/DOMinus.js/issues"
+  },
+  "homepage": "https://github.com/Gurigraphics/DOMinus.js#readme"
+}

@@ -1,6 +1,6 @@
 /*
  * 	DOMinus.js
- *	Version 2.0.9
+ *	Version 2.0.10
  * 	https://github.com/Gurigraphics/DOMinus.js
  *
  * 	Licensed under the MIT license:
@@ -165,3 +165,4 @@ var Dominus = function(){
     EVENTS: () => EVENTS
   }
 }
+export { Dominus }
