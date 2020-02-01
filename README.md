@@ -1,4 +1,4 @@
-![alt tag](https://imgur.com/gRF4fHW.png)
+![alt tag](https://imgur.com/L7KcXfr.png)
 
 DOMinus.js is a reactive data binding library that turn HTML irrelevant.
  
