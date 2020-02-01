@@ -1,4 +1,4 @@
-![alt tag](https://imgur.com/a8IlQGU.png)
+![alt tag](https://imgur.com/gRF4fHW.png)
 
 DOMinus.js is a reactive data binding library that turn HTML irrelevant.
  
@@ -8,40 +8,28 @@ DOMinus.js is a reactive data binding library that turn HTML irrelevant.
 
  ## What this make?
   
- Change "**data**" -> change "**view**" automagically
+Change "**data**" -> change "**view**" automagically
 
-DIV:
+#### Example
  ```HTML
 <div id="element"></div>
 ```
 Code:
  ```Javascript
 HTML.element.html = "hello world" 
-```
-Result:
- ```Javascript
-<div id="element"> hello world </div>
+// Result: <div id="element"> hello world </div>
 ```
 Code:
  ```Javascript
 HTML.element.tag = "button"
-```
-Result:
- ```Javascript
-<button id="element"> hello world </button>
+// Result: <button id="element"> hello world </button>
 ```
 Code:
  ```Javascript
 HTML.element.onclick = "go()"
-```
-Result:
- ```Javascript
-<button id="element" onclick="go()"> hello world </button> 
+// Result: <button id="element" onclick="go()"> hello world </button> 
 ```
  
-  
-  ---
-  
 ## How use this
 
 ```Html
@@ -85,7 +73,7 @@ DOM.add("element", "#app")
 
 </script>
 
-Result: <div id="element" > Hello World </div>
+// Result: <div id="element" > Hello World </div>
 ```
 
 
@@ -107,10 +95,6 @@ console.log( div )
 Result: 
 <button id="name" class="class1 class2"> content </button>
 ```
- 
- ## Sandbox
-
-https://playcode.io/180373/v2
 
   ---
   
@@ -174,6 +158,28 @@ The "HTML codes" now interest only for browsers.
  HTML.element.onclick = "go()"
  // <button id="element" onclick="go()"> hello world </button> 
   ```
+ 
+ ```Javascript
+var DOM = new Dominus()
+var HTML = DOM.HTML()
+var h = DOM.h();
+ 
+HTML.image = {
+  tag: "image",
+  src: "https://www.google.com/logos/doodles/2020/celebrating-mary-somerville-6753651837108667-2x.jpg"
+}
+
+HTML.element = { 
+  id: "element",
+  html: "image"
+}
+
+DOM.add("element", "#app")
+ 
+var imageURL = "https://www.google.com.br/logos/doodles/2020/lelia-gonzalezs-85th-birthday-6753651837108278-l.png"
+//HTML.image.src = imageURL
+ ```
+  
  
  ---
  
